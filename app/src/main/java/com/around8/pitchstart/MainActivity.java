@@ -22,7 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
+    private final String [] possibleNotes = new String [] {"a","aflat","asharp","b","bflat","bsharp","c","cflat","csharp",
+            "d","dflat","dsharp","e","eflat","esharp","f","fflat","fsharp","g","gflat","gsharp"};
     private static final int REQUEST_CODE = 1234;
     private ListView wordsList;
 
@@ -56,10 +57,11 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Voice recognition Demo...");
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "PitchStart");
         startActivityForResult(intent, REQUEST_CODE);
     }
-    private String [] findNotes(ArrayList<String> x){
+
+    private String [] splitNotes(ArrayList<String> x){ //splits the string of voice text into separated array
         String[] notes = x.get(0).split("&|and");
 
         for(int i=0;i<notes.length;i++){
@@ -71,6 +73,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private String[] sortNotes(String [] x){ //checks if the string is a note, if not sets it as unknown
+        for(int i =0;i<x.length;i++){
+            for(String checkNote:possibleNotes){
+                if(checkNote.equals(x[i].toLowerCase())){
+                }else {
+                    x[i] = "Note not recognized";
+                }
+            }
+        }
+        return x;
+    }
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK)
@@ -80,9 +94,14 @@ public class MainActivity extends AppCompatActivity {
                     RecognizerIntent.EXTRA_RESULTS);
             ArrayList<String> closest = new ArrayList<String>();
             closest.add(matches.get(0));
+            String[] notes = splitNotes(closest);
+            notes = sortNotes(notes);
+            ArrayList<String> outputNotes = new ArrayList<String>();
+            for(int i =0;i<notes.length;i++) { //changes the notes array into an arrayList to satisfy function below
+                outputNotes.add(notes[i]);
+            }
             wordsList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
-                    closest));
-            String[] notes = findNotes(closest);
+                    outputNotes)); //sets the viewList on the app to the arrayList as the 3rd parameter
         }
         super.onActivityResult(requestCode, resultCode, data);
 

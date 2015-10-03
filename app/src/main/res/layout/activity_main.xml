@@ -3,22 +3,32 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
-
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="4dip"
-        android:text="Click the button and start speaking" />
+        android:text="Separate each note by saying &quot;and&quot;"
+        android:singleLine="true"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:paddingTop="4dip"
+        android:textSize="16dp"
+        android:gravity="center"/>
 
     <Button android:id="@+id/speakButton"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
         android:onClick="speakButtonClicked"
-        android:layout_height="wrap_content"
-        android:text="Click Me!" />
+        android:text="Click me!"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/custombutton"
+        android:layout_marginTop="5dp" />
 
     <ListView android:id="@+id/list"
         android:layout_width="fill_parent"
         android:layout_height="0dip"
-        android:layout_weight="1" />
+        android:layout_weight="1"/>
 
 </LinearLayout>
