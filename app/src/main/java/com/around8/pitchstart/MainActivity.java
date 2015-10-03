@@ -59,6 +59,17 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Voice recognition Demo...");
         startActivityForResult(intent, REQUEST_CODE);
     }
+    private String [] findNotes(ArrayList<String> x){
+        String[] notes = x.get(0).split("&|and");
+
+        for(int i=0;i<notes.length;i++){
+            notes[i] = notes[i].replace(" ","");
+            System.out.println(notes[i]);
+
+        }
+        return notes;
+
+    }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -71,7 +82,9 @@ public class MainActivity extends AppCompatActivity {
             closest.add(matches.get(0));
             wordsList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
                     closest));
+            String[] notes = findNotes(closest);
         }
         super.onActivityResult(requestCode, resultCode, data);
+
     }
 }
