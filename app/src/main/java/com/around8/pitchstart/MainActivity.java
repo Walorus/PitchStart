@@ -22,8 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private final String [] possibleNotes = new String [] {"a","aflat","asharp","b","bflat","bsharp","c","cflat","csharp",
-            "d","dflat","dsharp","e","eflat","esharp","f","fflat","fsharp","g","gflat","gsharp"};
+    private final String [] possibleNotes = new String [] {"a","aflat","asharp","b","bflat","c","csharp",
+            "d","dflat","dsharp","e","eflat","f","fsharp","g","gflat","gsharp"};
     private static final int REQUEST_CODE = 1234;
     private ListView wordsList;
 
@@ -66,7 +66,8 @@ public class MainActivity extends AppCompatActivity {
 
         for(int i=0;i<notes.length;i++){
             notes[i] = notes[i].replace(" ","");
-            System.out.println(notes[i]);
+            notes[i]=notes[i].toLowerCase();
+
 
         }
         return notes;
@@ -75,14 +76,21 @@ public class MainActivity extends AppCompatActivity {
 
     private String[] sortNotes(String [] x){ //checks if the string is a note, if not sets it as unknown
         for(int i =0;i<x.length;i++){
+            boolean isIn = false;
             for(String checkNote:possibleNotes){
-                if(checkNote.equals(x[i].toLowerCase())){
-                }else {
-                    x[i] = "Note not recognized";
+                if(checkNote.equals(x[i])){
+                    isIn=true;
                 }
+            }
+            if(!isIn){
+                x[i] = "Note not recognized";
             }
         }
         return x;
+    }
+
+    private void playPitches(String [] notes){
+
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
@@ -94,8 +102,9 @@ public class MainActivity extends AppCompatActivity {
                     RecognizerIntent.EXTRA_RESULTS);
             ArrayList<String> closest = new ArrayList<String>();
             closest.add(matches.get(0));
-            String[] notes = splitNotes(closest);
-            notes = sortNotes(notes);
+            String[] separatedText = splitNotes(closest);
+            String [] notes = sortNotes(separatedText);
+            playPitches(notes);
             ArrayList<String> outputNotes = new ArrayList<String>();
             for(int i =0;i<notes.length;i++) { //changes the notes array into an arrayList to satisfy function below
                 outputNotes.add(notes[i]);
