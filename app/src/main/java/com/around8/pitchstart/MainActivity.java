@@ -1,20 +1,14 @@
 package com.around8.pitchstart;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.app.Activity;
-import android.os.Bundle;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.speech.RecognizerIntent;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -24,13 +18,27 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private final String [] possibleNotes = new String [] {"a","aflat","asharp","b","bflat","c","csharp",
             "d","dflat","dsharp","e","eflat","f","fsharp","g","gflat","gsharp"};
+
+
     private static final int REQUEST_CODE = 1234;
+    /*private MediaPlayer[] songs = {MediaPlayer.create(this, R.raw.a), MediaPlayer.create(this, R.raw.gsharp),
+            MediaPlayer.create(this, R.raw.asharp),
+            MediaPlayer.create(this, R.raw.b), MediaPlayer.create(this, R.raw.asharp), MediaPlayer.create(this, R.raw.c),
+            MediaPlayer.create(this, R.raw.csharp), MediaPlayer.create(this, R.raw.d), MediaPlayer.create(this, R.raw.csharp),
+            MediaPlayer.create(this, R.raw.dsharp), MediaPlayer.create(this, R.raw.e), MediaPlayer.create(this, R.raw.dsharp),
+            MediaPlayer.create(this, R.raw.f), MediaPlayer.create(this, R.raw.fsharp), MediaPlayer.create(this, R.raw.g),
+            MediaPlayer.create(this, R.raw.fsharp), MediaPlayer.create(this, R.raw.gsharp)};*/
+    private int [] songs = {R.raw.a,R.raw.gsharp,R.raw.asharp,R.raw.b,R.raw.asharp,R.raw.c,R.raw.csharp,R.raw.d,R.raw.csharp,
+            R.raw.dsharp,R.raw.e,R.raw.dsharp,R.raw.f,R.raw.fsharp,R.raw.g,R.raw.fsharp,R.raw.gsharp};
+
+
     private ListView wordsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         Button speakButton = (Button) findViewById(R.id.speakButton);
 
@@ -46,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
             speakButton.setText("Recognizer not present");
         }
     }
+
+
 
     public void speakButtonClicked(View v)
     {
@@ -88,9 +98,24 @@ public class MainActivity extends AppCompatActivity {
         }
         return x;
     }
+    private void playSong(int x){
+        MediaPlayer note = MediaPlayer.create(this,x);
+        note.start();
+    }
 
     private void playPitches(String [] notes){
 
+        int lastNoteIndex=0;
+        for(int i = 0; i < notes.length; i++){
+            for(int j = lastNoteIndex; j<possibleNotes.length; j++){
+                if(notes[i].equals(possibleNotes[j])){
+                    playSong(songs[j]);
+                    lastNoteIndex=j;
+                    SystemClock.sleep(1000);
+                    break;
+                }
+            }
+        }
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
