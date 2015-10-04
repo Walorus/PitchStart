@@ -60,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
     public void speakButtonClicked(View v)
     {
         startVoiceRecognitionActivity();
+
+
+
     }
 
     private void startVoiceRecognitionActivity()
@@ -72,11 +75,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String [] splitNotes(ArrayList<String> x){ //splits the string of voice text into separated array
+
+
         String[] notes = x.get(0).split("&|and");
+
 
         for(int i=0;i<notes.length;i++){
             notes[i] = notes[i].replace(" ","");
             notes[i]=notes[i].toLowerCase();
+            System.out.println(notes[i]);
 
 
         }
@@ -105,12 +112,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void playPitches(String [] notes){
 
-        int lastNoteIndex=0;
+        //int lastNoteIndex=0;
         for(int i = 0; i < notes.length; i++){
-            for(int j = lastNoteIndex; j<possibleNotes.length; j++){
+            for(int j = 0; j<possibleNotes.length; j++){
                 if(notes[i].equals(possibleNotes[j])){
                     playSong(songs[j]);
-                    lastNoteIndex=j;
+                    //lastNoteIndex=j;
                     SystemClock.sleep(1000);
                     break;
                 }
@@ -129,13 +136,15 @@ public class MainActivity extends AppCompatActivity {
             closest.add(matches.get(0));
             String[] separatedText = splitNotes(closest);
             String [] notes = sortNotes(separatedText);
-            playPitches(notes);
             ArrayList<String> outputNotes = new ArrayList<String>();
             for(int i =0;i<notes.length;i++) { //changes the notes array into an arrayList to satisfy function below
                 outputNotes.add(notes[i]);
             }
+            playPitches(notes);
+
             wordsList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
                     outputNotes)); //sets the viewList on the app to the arrayList as the 3rd parameter
+
         }
         super.onActivityResult(requestCode, resultCode, data);
 
